@@ -1,0 +1,10 @@
+<div class="favourites">
+  <div class="city-cards">
+    @for (city of favouriteCities; track city.city) {
+      <ng-container>
+        <app-city-card [city]="city" (favouriteCheck)="onFavouriteChange($event)">
+        </app-city-card>
+      </ng-container>
+    }
+  </div>
+</div>

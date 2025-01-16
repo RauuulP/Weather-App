@@ -1,0 +1,32 @@
+<div class="city-card">
+  <div class="city-header">
+    <h3>{{ city.city }}</h3>
+    <button class="favourite-btn" (click)="toogleFavourite()" >
+        @if(!city.isFavourite){
+          <div>🤍</div>
+        } @else {
+          <div>❤️</div>
+        }
+    </button>
+  </div>
+  <div class="city-info">
+    <span class="info-label">Max Temp:</span>
+    <span class="info-value">{{ city.tempMax }}°C</span>
+  </div>
+  <div class="city-info">
+    <span class="info-label">Average Max Temp:</span>
+    <span class="info-value">{{ city.tempAverageMax }}°C</span>
+  </div>
+  <div class="city-info">
+    <span class="info-label">Min Temp:</span>
+    <span class="info-value">{{ city.tempMin }}°C</span>
+  </div>
+  <div class="city-info">
+    <span class="info-label">Average Min Temp:</span>
+    <span class="info-value">{{ city.tempAverageMin }}°C</span>
+  </div>
+  <div class="city-info">
+    <span class="info-label">Precipitation:</span>
+    <span class="info-value">{{ city.precipitation }} mm</span>
+  </div>
+</div>

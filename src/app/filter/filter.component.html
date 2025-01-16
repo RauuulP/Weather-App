@@ -1,0 +1,11 @@
+<div class="filter">
+  <label for="continent-select">Filter By Continent:</label>
+  <select id="continent-select" [(ngModel)]="selectedContinent" (change)="filterHandler()">
+    <option value="All">All Continents</option>
+    <option value="Europe">Europe</option>
+    <option value="Asia">Asia</option>
+    <option value="America">America</option>
+    <option value="Africa">Africa</option>
+    <option value="Australia">Australia</option>
+  </select>
+</div>
