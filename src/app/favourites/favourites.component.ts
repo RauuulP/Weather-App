@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CityCardComponent } from '../city-card/city-card.component';
+import { City } from '../city';
 
 @Component({
   selector: 'app-favourites',
@@ -10,13 +11,13 @@ import { CityCardComponent } from '../city-card/city-card.component';
 })
 export class FavouritesComponent {
   @Input()
-  favouriteCities: any[] = [];
+  favouriteCities: City[] = [];
 
   @Output()
-  favouriteCheck = new EventEmitter<{ city: any; isFavourite: boolean }>();
+  favouriteCheck = new EventEmitter<{ city: City; isFavourite: boolean }>();
 
   
-  onFavouriteChange(event: {isFavourite: boolean, city: any}) {
+  onFavouriteChange(event: {isFavourite: boolean, city: City}) {
     const { city, isFavourite } = event;
     
     if (!isFavourite) {

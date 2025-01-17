@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { City } from '../city';
 
 @Component({
   selector: 'app-city-card',
@@ -10,7 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class CityCardComponent {
   @Input()
-  city: any;
+  city!: City  ;
 
   @Output()
   favouriteCheck = new EventEmitter<{city: any, isFavourite: boolean}>();

@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WeatherService } from './services/weather.service';
 
-import { every, firstValueFrom } from 'rxjs';
+import { firstValueFrom } from 'rxjs';
 import { CityCardComponent } from './city-card/city-card.component';
 import { FilterComponent } from './filter/filter.component';
 import { FavouritesComponent } from './favourites/favourites.component';
+import { City } from './city';
 
 @Component({
   selector: 'app-root',
@@ -34,7 +35,7 @@ export class AppComponent implements OnInit {
   }
 
   fetchWeatherData() {
-    const weatherObservables = this.weatherService.getWeatherForAllCities();
+    const weatherObservables = this.weatherService.getWeatherForAllCities()
 
     Promise.all(weatherObservables.map((obs) => firstValueFrom(obs)))
       .then((weatherResponses) => {
@@ -52,7 +53,7 @@ export class AppComponent implements OnInit {
               response.daily.temperature_2m_min
             ),
             precipitation: response.daily.precipitation_sum[0],
-          };
+          } as City;
         });
         this.filteredCities = [...this.cities];
         // console.log(this.cities)
@@ -77,6 +78,9 @@ export class AppComponent implements OnInit {
         return city.continent.toLowerCase() === selectedContinent.toLowerCase();
       });
     }
+    this.favouriteCities = [...this.filteredCities].filter(
+      (city) => city.isFavourite
+    );
   }
 
   onFavouriteChanged(event: { city: any; isFavourite: boolean }) {
