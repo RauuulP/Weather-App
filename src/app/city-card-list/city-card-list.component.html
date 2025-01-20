@@ -1,1 +1,8 @@
-<p>city-card-list works!</p>
+<div class="city-cards">
+  @for(city of displayedCities; track city.city){
+  <app-city-card 
+    [city]="city" 
+    (favouriteCheck)="onFavouriteChanged($event)">
+  </app-city-card>
+  }
+</div>

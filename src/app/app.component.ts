@@ -3,17 +3,17 @@ import { RouterOutlet } from '@angular/router';
 import { WeatherService } from './services/weather.service';
 
 import { firstValueFrom } from 'rxjs';
-import { CityCardComponent } from './city-card/city-card.component';
-import { FavouritesComponent } from './favourites/favourites.component';
 import { City } from './city';
+import { FavouritesComponent } from './favourites/favourites.component';
 import { HeaderComponent } from "./header/header.component";
+import { CityCardListComponent } from './city-card-list/city-card-list.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
     RouterOutlet,
-    CityCardComponent,
+    CityCardListComponent,
     FavouritesComponent,
     HeaderComponent
 ],
@@ -23,8 +23,8 @@ import { HeaderComponent } from "./header/header.component";
 export class AppComponent implements OnInit {
   title = 'weather-app';
   cities: any[] = [];
-  filteredCities: any[] = [];
-  favouriteCities: any[] = [];
+  filteredCities: City[] = [];
+  favouriteCities: City[] = [];
   showFavourites = false;
 
 

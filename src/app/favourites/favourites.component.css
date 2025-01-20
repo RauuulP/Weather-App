@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 20px;
+  padding: 10px;
   color: #474242;
   
 }
@@ -10,5 +10,12 @@
 .favourites .city-cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: space-evenly;
   gap: 20px;
+}
+
+.message{ 
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #474242;
 }

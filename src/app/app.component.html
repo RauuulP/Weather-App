@@ -7,22 +7,12 @@
 >
 </app-header>
 
-@if(showFavourites){
-<app-favourites
-  [favouriteCities]="favouriteCities"
-  (favouriteCheck)="onFavouriteChanged($event)"
->
-</app-favourites>
-} @if (!showFavourites){
-<div class="city-cards">
-  @for (city of filteredCities; track city.name){
-  <app-city-card
-    [city]="city"
-    (favouriteCheck)="onFavouriteChanged($event)"
-  ></app-city-card>
-  }
-</div>
-}
+<app-city-card-list
+  [cities]="filteredCities"
+  [showFavourites]="showFavourites"
+  (favouriteCheck)="onFavouriteChanged($event)">
+</app-city-card-list>
+
 <router-outlet />
 
 <!-- // app-header component
