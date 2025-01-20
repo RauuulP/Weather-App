@@ -4,9 +4,9 @@ import { WeatherService } from './services/weather.service';
 
 import { firstValueFrom } from 'rxjs';
 import { CityCardComponent } from './city-card/city-card.component';
-import { FilterComponent } from './filter/filter.component';
 import { FavouritesComponent } from './favourites/favourites.component';
 import { City } from './city';
+import { HeaderComponent } from "./header/header.component";
 
 @Component({
   selector: 'app-root',
@@ -14,9 +14,9 @@ import { City } from './city';
   imports: [
     RouterOutlet,
     CityCardComponent,
-    FilterComponent,
     FavouritesComponent,
-  ],
+    HeaderComponent
+],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
@@ -27,6 +27,8 @@ export class AppComponent implements OnInit {
   favouriteCities: any[] = [];
   showFavourites = false;
 
+
+
   constructor(private weatherService: WeatherService) {}
 
   ngOnInit() {
@@ -35,7 +37,7 @@ export class AppComponent implements OnInit {
   }
 
   fetchWeatherData() {
-    const weatherObservables = this.weatherService.getWeatherForAllCities()
+    const weatherObservables = this.weatherService.getWeatherForAllCities();
 
     Promise.all(weatherObservables.map((obs) => firstValueFrom(obs)))
       .then((weatherResponses) => {
