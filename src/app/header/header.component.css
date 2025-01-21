@@ -19,8 +19,8 @@ h1 {
 button {
   padding: 10px 20px;
   font-size: 1.2rem;
-  background-color: transparent;
   color: #474242;
+  background-color: transparent;
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -34,3 +34,16 @@ button {
 button:hover {
   background-color: #f0f4c337;
 }
+
+button mat-icon {
+  font-size: 1.6rem;
+  margin-right: 5px;
+  color: white;
+}
+
+button.favourite mat-icon {
+  color: red;
+}
+
+
+

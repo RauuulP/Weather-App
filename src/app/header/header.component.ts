@@ -1,11 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { FilterComponent } from '../filter/filter.component';
+import { MatIconModule } from '@angular/material/icon';
 import { City } from '../city';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [FilterComponent],
+  imports: [CommonModule, FilterComponent, MatIconModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css',
 })
