@@ -1,12 +1,14 @@
 <div class="city-card">
   <div class="city-header">
     <h3>{{ city.city }}</h3>
-    <button class="favourite-btn" (click)="toogleFavourite()" >
-        @if(!city.isFavourite){
-          <div>🤍</div>
-        } @else {
-          <div>❤️</div>
-        }
+    <button
+      class="favourite-btn"
+      (click)="toogleFavourite()"
+      [ngClass]="{ favourite: city.isFavourite }"
+    >
+      <mat-icon>
+        {{ city.isFavourite ? "favorite" : "favorite_border" }}
+      </mat-icon>
     </button>
   </div>
   <div class="city-info">
