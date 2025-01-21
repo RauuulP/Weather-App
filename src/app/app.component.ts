@@ -4,8 +4,7 @@ import { WeatherService } from './services/weather.service';
 
 import { firstValueFrom } from 'rxjs';
 import { City } from './city';
-import { FavouritesComponent } from './favourites/favourites.component';
-import { HeaderComponent } from "./header/header.component";
+import { HeaderComponent } from './header/header.component';
 import { CityCardListComponent } from './city-card-list/city-card-list.component';
 
 @Component({
@@ -14,9 +13,8 @@ import { CityCardListComponent } from './city-card-list/city-card-list.component
   imports: [
     RouterOutlet,
     CityCardListComponent,
-    FavouritesComponent,
-    HeaderComponent
-],
+    HeaderComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
@@ -26,8 +24,6 @@ export class AppComponent implements OnInit {
   filteredCities: City[] = [];
   favouriteCities: City[] = [];
   showFavourites = false;
-
-
 
   constructor(private weatherService: WeatherService) {}
 

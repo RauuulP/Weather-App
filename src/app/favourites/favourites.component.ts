@@ -16,10 +16,9 @@ export class FavouritesComponent {
   @Output()
   favouriteCheck = new EventEmitter<{ city: City; isFavourite: boolean }>();
 
-  
-  onFavouriteChange(event: {isFavourite: boolean, city: City}) {
+  onFavouriteChange(event: { isFavourite: boolean; city: City }) {
     const { city, isFavourite } = event;
-    
+
     if (!isFavourite) {
       this.favouriteCities = this.favouriteCities.filter(
         (fav) => fav.city !== city.city
@@ -29,6 +28,6 @@ export class FavouritesComponent {
         this.favouriteCities.push(city);
       }
     }
-    this.favouriteCheck.emit({city, isFavourite});
+    this.favouriteCheck.emit({ city, isFavourite });
   }
 }

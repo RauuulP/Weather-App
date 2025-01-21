@@ -10,7 +10,7 @@ import { City } from '../city';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
-  @Input() 
+  @Input()
   cities: City[] = [];
 
   @Input()
@@ -20,16 +20,16 @@ export class HeaderComponent {
   showFavourites = false;
 
   @Output()
-  filter = new EventEmitter<string>()
+  filter = new EventEmitter<string>();
 
   @Output()
-  toogleFavourites = new EventEmitter<void>()
+  toogleFavourites = new EventEmitter<void>();
 
-  onFilterChange(selectedContinent: string){
-    this.filter.emit(selectedContinent)
+  onFilterChange(selectedContinent: string) {
+    this.filter.emit(selectedContinent);
   }
 
-  onToggleFavourites(){
-    this.toogleFavourites.emit()
+  onToggleFavourites() {
+    this.toogleFavourites.emit();
   }
 }

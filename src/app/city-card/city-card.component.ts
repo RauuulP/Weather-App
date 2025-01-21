@@ -11,13 +11,16 @@ import { City } from '../city';
 })
 export class CityCardComponent {
   @Input()
-  city!: City  ;
+  city!: City;
 
   @Output()
-  favouriteCheck = new EventEmitter<{city: any, isFavourite: boolean}>();
+  favouriteCheck = new EventEmitter<{ city: any; isFavourite: boolean }>();
 
   toogleFavourite() {
     this.city.isFavourite = !this.city.isFavourite;
-    this.favouriteCheck.emit({city: this.city, isFavourite: this.city.isFavourite});
+    this.favouriteCheck.emit({
+      city: this.city,
+      isFavourite: this.city.isFavourite,
+    });
   }
 }
