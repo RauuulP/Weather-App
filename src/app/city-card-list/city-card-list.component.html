@@ -1,8 +1,6 @@
 <div class="city-cards">
-  @for(city of displayedCities; track city.city){
-  <app-city-card 
-    [city]="city" 
-    (favouriteCheck)="onFavouriteChanged($event)">
+  @for(city of displayedCities(); track city.city){
+  <app-city-card [city]="city" (favouriteCheck)="onFavouriteChanged($event)">
   </app-city-card>
   }
 </div>

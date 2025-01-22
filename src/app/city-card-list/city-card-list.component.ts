@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  computed,
+  EventEmitter,
+  Input,
+  Output,
+  signal,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import { City } from '../city';
 import { CityCardComponent } from '../city-card/city-card.component';
 
@@ -8,23 +16,30 @@ import { CityCardComponent } from '../city-card/city-card.component';
   imports: [CityCardComponent],
   templateUrl: './city-card-list.component.html',
   styleUrl: './city-card-list.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CityCardListComponent {
-  @Input()
-  cities: City[] = [];
-
-  @Input()
-  showFavourites = false;
-
-  @Output()
-  favouriteCheck = new EventEmitter<{ city: City; isFavourite: boolean }>();
-
-  get displayedCities(): City[] {
-    if (this.showFavourites) {
-      return this.cities.filter((city) => city.isFavourite);
-    }
-    return this.cities;
+  @Input() set cities(value: City[]) {
+    this.citiesSignal.set(value);
   }
+
+  @Input() set showFavouritesInitial(value: boolean) {
+    this.showFavouritesSignal.set(value);
+  }
+
+  @Output() favouriteCheck = new EventEmitter<{
+    city: City;
+    isFavourite: boolean;
+  }>();
+
+  private citiesSignal = signal<City[]>([]);
+  private showFavouritesSignal = signal(false);
+
+  displayedCities = computed(() => {
+    const cities = this.citiesSignal();
+    const showFavourites = this.showFavouritesSignal();
+    return showFavourites ? cities.filter((city) => city.isFavourite) : cities;
+  });
 
   onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
     this.favouriteCheck.emit(event);

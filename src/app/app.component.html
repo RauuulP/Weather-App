@@ -1,6 +1,6 @@
 <app-header
   [cities]="cities"
-  [showFavourites]="showFavourites"
+  [showFavouritesInitial]="showFavourites"
   (filter)="filterByContinent($event)"
   (toogleFavourites)="toogleFavourites()"
 >
@@ -8,8 +8,9 @@
 
 <app-city-card-list
   [cities]="filteredCities"
-  [showFavourites]="showFavourites"
-  (favouriteCheck)="onFavouriteChanged($event)">
+  [showFavouritesInitial]="showFavourites"
+  (favouriteCheck)="onFavouriteChanged($event)"
+>
 </app-city-card-list>
 
 <router-outlet />
@@ -17,4 +18,6 @@
 <!-- // app-header component
     -> favourite component
     -> filter component
-// city-card-list component -->
+// city-card-list component 
+
+//search functionality -->
