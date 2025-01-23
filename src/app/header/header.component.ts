@@ -26,7 +26,7 @@ export class HeaderComponent {
   onFilterChange(selectedContinent: string) {
     this.filter.emit(selectedContinent);
   }
-
+ 
   onToggleFavourites() {
     this.showFavourites.update((prevVal) => !prevVal)
     this.toogleFavourites.emit();
