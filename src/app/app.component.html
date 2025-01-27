@@ -6,6 +6,8 @@
 >
 </app-header>
 
+<app-search-city (search)="onSearchQuery($event)"> </app-search-city>
+
 <app-city-card-list
   [cities]="filteredCities"
   [showFavouritesInitial]="showFavourites"

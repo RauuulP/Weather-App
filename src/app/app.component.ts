@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { WeatherService } from './services/weather.service';
 
@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { City } from './city';
 import { HeaderComponent } from './header/header.component';
 import { CityCardListComponent } from './city-card-list/city-card-list.component';
+import { SearchCityComponent } from './search-city/search-city.component';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ import { CityCardListComponent } from './city-card-list/city-card-list.component
     RouterOutlet,
     CityCardListComponent,
     HeaderComponent,
+    SearchCityComponent,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
@@ -23,7 +25,9 @@ export class AppComponent implements OnInit {
   cities: any[] = [];
   filteredCities: City[] = [];
   favouriteCities: City[] = [];
-  showFavourites = false;
+  selectedContinent: string = "All";
+  showFavourites: boolean = false;
+  searchQuery: string = '';
 
   constructor(private weatherService: WeatherService) {}
 
@@ -69,6 +73,7 @@ export class AppComponent implements OnInit {
 
   filterByContinent(selectedContinent: string) {
     // console.log('Filtering by Continent:', selectedContinent);
+    this.selectedContinent = selectedContinent;
     if (selectedContinent === 'All') {
       this.filteredCities = [...this.cities];
     } else {
@@ -76,9 +81,22 @@ export class AppComponent implements OnInit {
         return city.continent.toLowerCase() === selectedContinent.toLowerCase();
       });
     }
-    this.favouriteCities = [...this.filteredCities].filter(
-      (city) => city.isFavourite
-    );
+    this.filterWithSearchQuery();
+  }
+
+  onSearchQuery(query: string) {
+    this.searchQuery = query;
+    this.filteredCities = [...this.cities];
+    this.filterByContinent(this.selectedContinent || 'All');
+    this.filterWithSearchQuery();
+  }
+
+  filterWithSearchQuery() {
+    if (this.searchQuery) {
+      this.filteredCities = this.filteredCities.filter((city) =>
+        city.city.toLowerCase().startsWith(this.searchQuery.toLowerCase())
+      );
+    }
   }
 
   onFavouriteChanged(event: { city: any; isFavourite: boolean }) {

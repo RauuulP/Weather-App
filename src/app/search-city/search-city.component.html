@@ -1,0 +1,10 @@
+<div class="search-city">
+  <input
+    #searchInput
+    type="text"
+    placeholder="Search for a city"
+    [(ngModel)]="query"
+    (ngModelChange)="onSearch()"
+    />
+    <mat-icon class="clear-icon" (click)="clearSearch()">close</mat-icon>
+</div>
