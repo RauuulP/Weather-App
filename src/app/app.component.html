@@ -1,10 +1,13 @@
-<app-header
+<!-- <app-header
   [cities]="cities"
   [showFavouritesInitial]="showFavourites"
-  (filter)="filterByContinent($event)"
   (toogleFavourites)="toogleFavourites()"
+  (filter)="filterByContinent($event)"
 >
-</app-header>
+</app-header> -->
+  <app-header (filter)="filterByContinent($event)"
+  (toogleFavourites)="toogleFavourites()"
+   ></app-header>
 
 <app-search-city (search)="onSearchQuery($event)"> </app-search-city>
 

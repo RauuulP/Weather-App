@@ -7,6 +7,7 @@ import { City } from './city';
 import { HeaderComponent } from './header/header.component';
 import { CityCardListComponent } from './city-card-list/city-card-list.component';
 import { SearchCityComponent } from './search-city/search-city.component';
+import { CityService } from './services/city.service';
 
 @Component({
   selector: 'app-root',
@@ -25,15 +26,24 @@ export class AppComponent implements OnInit {
   cities: any[] = [];
   filteredCities: City[] = [];
   favouriteCities: City[] = [];
-  selectedContinent: string = "All";
+  selectedContinent: string = 'All';
   showFavourites: boolean = false;
   searchQuery: string = '';
 
-  constructor(private weatherService: WeatherService) {}
+  constructor(
+    private weatherService: WeatherService,
+    private cityService: CityService
+  ) {}
 
   ngOnInit() {
     this.fetchWeatherData();
-    this.cities = this.weatherService.getCities();
+    this.cityService.favouriteCities$.subscribe((favourites) => {
+      this.favouriteCities = favourites;
+  
+    });
+    this.cityService.filteredCities$.subscribe((filteredCities) => {
+      this.filteredCities = filteredCities;
+    });
   }
 
   fetchWeatherData() {
@@ -57,8 +67,9 @@ export class AppComponent implements OnInit {
             precipitation: response.daily.precipitation_sum[0],
           } as City;
         });
-        this.filteredCities = [...this.cities];
-        // console.log(this.cities)
+
+        this.cityService.setCities(this.cities);
+    
       })
       .catch((error) => {
         console.log('Error fetching weather data: ', error);
@@ -72,51 +83,48 @@ export class AppComponent implements OnInit {
   }
 
   filterByContinent(selectedContinent: string) {
-    // console.log('Filtering by Continent:', selectedContinent);
     this.selectedContinent = selectedContinent;
-    if (selectedContinent === 'All') {
-      this.filteredCities = [...this.cities];
-    } else {
-      this.filteredCities = this.cities.filter((city) => {
-        return city.continent.toLowerCase() === selectedContinent.toLowerCase();
-      });
-    }
-    this.filterWithSearchQuery();
+   
+    this.updateFilteredCities();
   }
 
   onSearchQuery(query: string) {
     this.searchQuery = query;
-    this.filteredCities = [...this.cities];
-    this.filterByContinent(this.selectedContinent || 'All');
-    this.filterWithSearchQuery();
+ 
+    this.updateFilteredCities();
   }
 
-  filterWithSearchQuery() {
+ 
+
+  updateFilteredCities() {
+    let citiesToShow = this.cities;
+
+    if (this.selectedContinent !== 'All') {
+      citiesToShow = citiesToShow.filter(
+        (city) =>
+          city.continent.toLowerCase() === this.selectedContinent.toLowerCase()
+      );
+    }
+
     if (this.searchQuery) {
-      this.filteredCities = this.filteredCities.filter((city) =>
+      citiesToShow = citiesToShow.filter((city) =>
         city.city.toLowerCase().startsWith(this.searchQuery.toLowerCase())
       );
     }
+    
+    if (this.showFavourites) {
+      citiesToShow = this.favouriteCities;
+    }
+
+    this.cityService.setCities(citiesToShow);
   }
 
-  onFavouriteChanged(event: { city: any; isFavourite: boolean }) {
-    // console.log(`City: ${city.city}, isFavourite: ${isFavourite}`);
-    const { city, isFavourite } = event;
-    city.isFavourite = isFavourite;
-
-    if (isFavourite) {
-      if (!this.favouriteCities.includes(city)) {
-        this.favouriteCities.push(city);
-      }
-    } else {
-      this.favouriteCities = this.favouriteCities.filter(
-        (fav) => fav.city !== city.city
-      );
-    }
-    // console.log('Favourite Cities: ', this.favouriteCities);
+  onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
+    this.cityService.toogleFavourites(event.city, event.isFavourite);
   }
 
   toogleFavourites() {
     this.showFavourites = !this.showFavourites;
+    this.updateFilteredCities();
   }
 }
