@@ -18,7 +18,6 @@ export class FavouritesComponent {
 
   onFavouriteChange(event: { isFavourite: boolean; city: City }) {
     const { city, isFavourite } = event;
-
     if (!isFavourite) {
       this.favouriteCities = this.favouriteCities.filter(
         (fav) => fav.city !== city.city
