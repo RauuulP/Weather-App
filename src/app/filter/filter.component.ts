@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CityService } from '../services/city.service';
 
 @Component({
   selector: 'app-filter',
@@ -9,12 +10,12 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./filter.component.css'],
 })
 export class FilterComponent {
-  @Output()
-  filter = new EventEmitter<string>();
 
   selectedContinent: string = 'All';
 
+  constructor(private cityService: CityService) {}
+
   filterHandler() {
-    this.filter.emit(this.selectedContinent);
+    this.cityService.filterCitiesByContinent(this.selectedContinent)
   }
 }

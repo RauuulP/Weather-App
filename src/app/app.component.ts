@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { WeatherService } from './services/weather.service';
 
@@ -13,6 +14,7 @@ import { CityService } from './services/city.service';
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet,
     CityCardListComponent,
     HeaderComponent,
@@ -23,12 +25,9 @@ import { CityService } from './services/city.service';
 })
 export class AppComponent implements OnInit {
   title = 'weather-app';
-  cities: any[] = [];
-  filteredCities: City[] = [];
-  favouriteCities: City[] = [];
-  selectedContinent: string = 'All';
-  showFavourites: boolean = false;
-  searchQuery: string = '';
+
+  cities$ = this.cityService.filteredCities$;
+  showFavourites$ = this.cityService.showFavourites$;
 
   constructor(
     private weatherService: WeatherService,
@@ -37,13 +36,6 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.fetchWeatherData();
-    this.cityService.favouriteCities$.subscribe((favourites) => {
-      this.favouriteCities = favourites;
-  
-    });
-    this.cityService.filteredCities$.subscribe((filteredCities) => {
-      this.filteredCities = filteredCities;
-    });
   }
 
   fetchWeatherData() {
@@ -51,11 +43,10 @@ export class AppComponent implements OnInit {
 
     Promise.all(weatherObservables.map((obs) => firstValueFrom(obs)))
       .then((weatherResponses) => {
-        this.cities = weatherResponses.map((response, index) => {
+        const cities = weatherResponses.map((response, index) => {
           return {
             city: this.weatherService.getCities()[index].name,
             continent: this.weatherService.getContinents(response.timezone),
-            // timezone:  response.timezone,
             tempMax: Math.max(...response.daily.temperature_2m_max),
             tempAverageMax: this.calculateAverage(
               response.daily.temperature_2m_max
@@ -68,8 +59,7 @@ export class AppComponent implements OnInit {
           } as City;
         });
 
-        this.cityService.setCities(this.cities);
-    
+        this.cityService.setCities(cities);
       })
       .catch((error) => {
         console.log('Error fetching weather data: ', error);
@@ -82,49 +72,11 @@ export class AppComponent implements OnInit {
     return Number(average.toFixed(2));
   }
 
-  filterByContinent(selectedContinent: string) {
-    this.selectedContinent = selectedContinent;
-   
-    this.updateFilteredCities();
-  }
-
-  onSearchQuery(query: string) {
-    this.searchQuery = query;
- 
-    this.updateFilteredCities();
-  }
-
- 
-
-  updateFilteredCities() {
-    let citiesToShow = this.cities;
-
-    if (this.selectedContinent !== 'All') {
-      citiesToShow = citiesToShow.filter(
-        (city) =>
-          city.continent.toLowerCase() === this.selectedContinent.toLowerCase()
-      );
-    }
-
-    if (this.searchQuery) {
-      citiesToShow = citiesToShow.filter((city) =>
-        city.city.toLowerCase().startsWith(this.searchQuery.toLowerCase())
-      );
-    }
-    
-    if (this.showFavourites) {
-      citiesToShow = this.favouriteCities;
-    }
-
-    this.cityService.setCities(citiesToShow);
-  }
-
   onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
     this.cityService.toogleFavourites(event.city, event.isFavourite);
   }
 
   toogleFavourites() {
-    this.showFavourites = !this.showFavourites;
-    this.updateFilteredCities();
+    this.cityService.toggleFavouritesView();
   }
 }

@@ -12,7 +12,6 @@ import { CityService } from '../services/city.service';
   styleUrl: './search-city.component.css',
 })
 export class SearchCityComponent {
-  @Output() search = new EventEmitter<string>();
   query: string = '';
 
   constructor(private cityService: CityService) {}
