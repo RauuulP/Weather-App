@@ -5,43 +5,35 @@ import {
   Input,
   Output,
   signal,
-  ChangeDetectionStrategy
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { City } from '../city';
 import { CityCardComponent } from '../city-card/city-card.component';
+import { map, Observable } from 'rxjs';
+import { CityService } from '../services/city.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-city-card-list',
   standalone: true,
-  imports: [CityCardComponent],
+  imports: [CityCardComponent, CommonModule],
   templateUrl: './city-card-list.component.html',
   styleUrl: './city-card-list.component.css',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CityCardListComponent {
-  @Input() set cities(value: City[]) {
-    this.citiesSignal.set(value);
-  }
-
-  @Input() set showFavouritesInitial(value: boolean) {
-    this.showFavouritesSignal.set(value);
-  }
+  cities$: Observable<City[]> = this.cityService.filteredCities$;
+  showFavourites$: Observable<boolean> = this.cityService.showFavourites$;
 
   @Output() favouriteCheck = new EventEmitter<{
     city: City;
     isFavourite: boolean;
   }>();
 
-  private citiesSignal = signal<City[]>([]);
-  private showFavouritesSignal = signal(false);
-
-  displayedCities = computed(() => {
-    const cities = this.citiesSignal();
-    const showFavourites = this.showFavouritesSignal();
-    return showFavourites ? cities.filter((city) => city.isFavourite) : cities;
-  });
+  constructor(private cityService: CityService) {}
 
   onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
     this.favouriteCheck.emit(event);
+    this.cityService.toogleFavourites(event.city, event.isFavourite);
   }
 }

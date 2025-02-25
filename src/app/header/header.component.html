@@ -1,7 +1,8 @@
 <div class="app-header">
-  <app-filter (filter)="onFilterChange($event)"></app-filter>
+  <app-filter></app-filter>
+
   <h1>Weather App</h1>
-  <button (click)="onToggleFavourites()" [ngClass]="{ favourite : showFavourites()  }">
+  <button (click)="toogleFavouritesView()" [ngClass]="{ favourite : showFavourites$ | async}">
     <mat-icon >
       favorite
     </mat-icon>

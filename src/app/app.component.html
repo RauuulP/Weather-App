@@ -1,18 +1,8 @@
-<app-header
-  [cities]="cities"
-  [showFavouritesInitial]="showFavourites"
-  (filter)="filterByContinent($event)"
-  (toogleFavourites)="toogleFavourites()"
->
-</app-header>
+<app-header (toogleFavourites)="toogleFavourites()"></app-header>
 
-<app-search-city (search)="onSearchQuery($event)"> </app-search-city>
+<app-search-city> </app-search-city>
 
-<app-city-card-list
-  [cities]="filteredCities"
-  [showFavouritesInitial]="showFavourites"
-  (favouriteCheck)="onFavouriteChanged($event)"
->
+<app-city-card-list (favouriteCheck)="onFavouriteChanged($event)">
 </app-city-card-list>
 
 <router-outlet />
@@ -22,4 +12,12 @@
     -> filter component
 // city-card-list component 
 
-//search functionality -->
+//search functionality
+
+
+// comunicarea dintre componenete
+// Observables - how and why ?
+// Observables vs Promise
+// Subject 
+
+-->

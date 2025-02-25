@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { RouterOutlet } from '@angular/router';
 import { WeatherService } from './services/weather.service';
 
@@ -7,11 +8,13 @@ import { City } from './city';
 import { HeaderComponent } from './header/header.component';
 import { CityCardListComponent } from './city-card-list/city-card-list.component';
 import { SearchCityComponent } from './search-city/search-city.component';
+import { CityService } from './services/city.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet,
     CityCardListComponent,
     HeaderComponent,
@@ -22,18 +25,17 @@ import { SearchCityComponent } from './search-city/search-city.component';
 })
 export class AppComponent implements OnInit {
   title = 'weather-app';
-  cities: any[] = [];
-  filteredCities: City[] = [];
-  favouriteCities: City[] = [];
-  selectedContinent: string = "All";
-  showFavourites: boolean = false;
-  searchQuery: string = '';
 
-  constructor(private weatherService: WeatherService) {}
+  cities$ = this.cityService.filteredCities$;
+  showFavourites$ = this.cityService.showFavourites$;
+
+  constructor(
+    private weatherService: WeatherService,
+    private cityService: CityService
+  ) {}
 
   ngOnInit() {
     this.fetchWeatherData();
-    this.cities = this.weatherService.getCities();
   }
 
   fetchWeatherData() {
@@ -41,11 +43,10 @@ export class AppComponent implements OnInit {
 
     Promise.all(weatherObservables.map((obs) => firstValueFrom(obs)))
       .then((weatherResponses) => {
-        this.cities = weatherResponses.map((response, index) => {
+        const cities = weatherResponses.map((response, index) => {
           return {
             city: this.weatherService.getCities()[index].name,
             continent: this.weatherService.getContinents(response.timezone),
-            // timezone:  response.timezone,
             tempMax: Math.max(...response.daily.temperature_2m_max),
             tempAverageMax: this.calculateAverage(
               response.daily.temperature_2m_max
@@ -57,8 +58,8 @@ export class AppComponent implements OnInit {
             precipitation: response.daily.precipitation_sum[0],
           } as City;
         });
-        this.filteredCities = [...this.cities];
-        // console.log(this.cities)
+
+        this.cityService.setCities(cities);
       })
       .catch((error) => {
         console.log('Error fetching weather data: ', error);
@@ -71,52 +72,11 @@ export class AppComponent implements OnInit {
     return Number(average.toFixed(2));
   }
 
-  filterByContinent(selectedContinent: string) {
-    // console.log('Filtering by Continent:', selectedContinent);
-    this.selectedContinent = selectedContinent;
-    if (selectedContinent === 'All') {
-      this.filteredCities = [...this.cities];
-    } else {
-      this.filteredCities = this.cities.filter((city) => {
-        return city.continent.toLowerCase() === selectedContinent.toLowerCase();
-      });
-    }
-    this.filterWithSearchQuery();
-  }
-
-  onSearchQuery(query: string) {
-    this.searchQuery = query;
-    this.filteredCities = [...this.cities];
-    this.filterByContinent(this.selectedContinent || 'All');
-    this.filterWithSearchQuery();
-  }
-
-  filterWithSearchQuery() {
-    if (this.searchQuery) {
-      this.filteredCities = this.filteredCities.filter((city) =>
-        city.city.toLowerCase().startsWith(this.searchQuery.toLowerCase())
-      );
-    }
-  }
-
-  onFavouriteChanged(event: { city: any; isFavourite: boolean }) {
-    // console.log(`City: ${city.city}, isFavourite: ${isFavourite}`);
-    const { city, isFavourite } = event;
-    city.isFavourite = isFavourite;
-
-    if (isFavourite) {
-      if (!this.favouriteCities.includes(city)) {
-        this.favouriteCities.push(city);
-      }
-    } else {
-      this.favouriteCities = this.favouriteCities.filter(
-        (fav) => fav.city !== city.city
-      );
-    }
-    // console.log('Favourite Cities: ', this.favouriteCities);
+  onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
+    this.cityService.toogleFavourites(event.city, event.isFavourite);
   }
 
   toogleFavourites() {
-    this.showFavourites = !this.showFavourites;
+    this.cityService.toggleFavouritesView();
   }
 }

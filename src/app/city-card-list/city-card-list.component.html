@@ -1,6 +1,12 @@
 <div class="city-cards">
-  @for(city of displayedCities(); track city.city){
-  <app-city-card [city]="city" (favouriteCheck)="onFavouriteChanged($event)">
-  </app-city-card>
+  @if((cities$ | async)!.length > 0) {
+    @for(city of (cities$ | async); track city.city){
+      <app-city-card [city]="city" (favouriteCheck)="onFavouriteChanged($event)">
+      </app-city-card>
+    }
+  } @else {
+    <p class="no-results">No cities match your filter.</p>
   }
+
+
 </div>

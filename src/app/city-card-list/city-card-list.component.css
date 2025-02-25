@@ -8,3 +8,11 @@
   text-align: center;
   z-index: 100;
 }
+
+.no-results {
+  text-align: center;
+  font-size: 1.3rem;
+  font-style: italic;
+  color: #635656;
+  margin-top: 20px;
+}

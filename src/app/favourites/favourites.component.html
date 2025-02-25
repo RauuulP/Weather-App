@@ -1,7 +1,7 @@
 <div class="favourites">
   <p class="message">Your favourites cities are: </p>
   <div class="city-cards">
-    @for (city of favouriteCities; track city.city) {
+    @for (city of favouriteCities$ | async; track city.city) {
       <ng-container>
         <app-city-card [city]="city" (favouriteCheck)="onFavouriteChange($event)">
         </app-city-card>
