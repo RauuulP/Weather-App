@@ -25,15 +25,9 @@ export class CityCardListComponent {
   cities$: Observable<City[]> = this.cityService.filteredCities$;
   showFavourites$: Observable<boolean> = this.cityService.showFavourites$;
 
-  @Output() favouriteCheck = new EventEmitter<{
-    city: City;
-    isFavourite: boolean;
-  }>();
-
   constructor(private cityService: CityService) {}
 
   onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
-    this.favouriteCheck.emit(event);
     this.cityService.toogleFavourites(event.city, event.isFavourite);
   }
 }

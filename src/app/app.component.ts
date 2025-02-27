@@ -26,8 +26,8 @@ import { CityService } from './services/city.service';
 export class AppComponent implements OnInit {
   title = 'weather-app';
 
-  cities$ = this.cityService.filteredCities$;
-  showFavourites$ = this.cityService.showFavourites$;
+  // cities$ = this.cityService.filteredCities$;
+  // showFavourites$ = this.cityService.showFavourites$;
 
   constructor(
     private weatherService: WeatherService,
@@ -70,13 +70,5 @@ export class AppComponent implements OnInit {
     const sum = values.reduce((acc, val) => acc + val, 0);
     const average = sum / values.length;
     return Number(average.toFixed(2));
-  }
-
-  onFavouriteChanged(event: { city: City; isFavourite: boolean }) {
-    this.cityService.toogleFavourites(event.city, event.isFavourite);
-  }
-
-  toogleFavourites() {
-    this.cityService.toggleFavouritesView();
   }
 }
